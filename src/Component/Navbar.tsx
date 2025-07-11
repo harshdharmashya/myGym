@@ -12,6 +12,8 @@ export default function Example() {
         { name: 'About', href: '/about' },
         { name: 'Contact Us', href: '/contact' },
         { name: 'Services', href: '/services' },
+        { name: 'Login', href: '/login' },
+        { name: 'Sign up', href: '/signup' },
     ]
 
     function classNames(...classes: any) {

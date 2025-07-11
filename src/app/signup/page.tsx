@@ -12,13 +12,15 @@ export default function SignupPage() {
     confirmPassword: '',
   });
 
+
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const { name, email, password, confirmPassword } = formData;
@@ -28,11 +30,26 @@ export default function SignupPage() {
       return;
     }
 
-    // TODO: send data to backend here
-    console.log('User Registered:', formData);
+    try {
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password }),
+      });
 
-    alert('Account created successfully!');
-    router.push('/login'); // redirect to login page
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || 'Something went wrong!');
+      }
+
+      alert('Account created successfully!');
+      router.push('/login');
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
