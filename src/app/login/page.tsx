@@ -12,7 +12,6 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setLoading(true);
     setError('');
 
@@ -24,14 +23,20 @@ export default function LoginPage() {
       });
 
       const data = await res.json();
+
       if (!res.ok) {
         toast.error(data.error || 'Login failed! Please try again.');
+        return;
       }
-     if(res.ok) {  
+
+      // Save login info to localStorage
+      localStorage.setItem('token', 'loggedin'); // You can use JWT token here if implemented
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      window.dispatchEvent(new Event('storage'));
+
       toast.success('Login successful!');
       router.push('/');
-     }
-     
     } catch (err: any) {
       toast.error('Login failed!');
       setError(err.message);
@@ -64,29 +69,28 @@ export default function LoginPage() {
 
         <div className="mb-6">
           <label className="block mb-1 font-semibold">Password</label>
-          <div className='flex justify-between'>
-            <input
-              type="password"
-              className="w-full px-3 py-2 border rounded"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <div>
-
-            </div>
-          </div>
+          <input
+            type="password"
+            className="w-full px-3 py-2 border rounded"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
         </div>
+
         <button
           type="submit"
-          className="w-full bg-gray-600 text-white py-2 rounded hover:bg-gray-800 transition"
+          className={`w-full text-white py-2 rounded transition ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-600 hover:bg-gray-800'
+            }`}
+          disabled={loading}
         >
-          Login
+          {loading ? 'Logging in...' : 'Login'}
         </button>
-        <div className='text-center mt-3'>
+
+        <div className="text-center mt-3">
           <a
             href="/forgotpassword"
-            className="text-blue-600 hover:underline text-sm "
+            className="text-blue-600 hover:underline text-sm"
           >
             Forgot Password?
           </a>
