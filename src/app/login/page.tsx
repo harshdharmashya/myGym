@@ -30,9 +30,9 @@ export default function LoginPage() {
       }
 
       // Save login info to localStorage
-      localStorage.setItem('token', 'loggedin'); // You can use JWT token here if implemented
+      localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-
+      
       window.dispatchEvent(new Event('storage'));
 
       toast.success('Login successful!');

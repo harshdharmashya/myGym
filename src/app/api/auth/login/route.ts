@@ -1,7 +1,7 @@
-// app/api/auth/login/route.ts
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 export async function POST(req: Request) {
   const { email, password } = await req.json();
@@ -12,6 +12,19 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
   }
 
-  // (Optional) Issue a session token or JWT here
-  return NextResponse.json({ message: 'Login successful', user: { id: user.id, email: user.email, name: user.name } });
+  const JWT_SECRET = process.env.JWT_SECRET as string;
+  const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h';
+
+  const token = jwt.sign(
+    { id: user.id, email: user.email, name: user.name },
+    JWT_SECRET,
+    { expiresIn: JWT_EXPIRES_IN as `${number}${'h' | 'd' | 'm'}` }
+  );
+
+  return NextResponse.json({
+    message: 'Login successful',
+    token,
+    expiresIn: JWT_EXPIRES_IN,
+    user: { id: user.id, email: user.email, name: user.name }
+  });
 }
