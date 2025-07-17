@@ -12,6 +12,7 @@ import {
 } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useEffect, useState } from 'react'
+import {jwtDecode} from 'jwt-decode';
 
 export default function Navbar() {
     const pathname = usePathname()
@@ -19,19 +20,30 @@ export default function Navbar() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [mounted, setMounted] = useState(false) // for hydration fix
-
     useEffect(() => {
         const checkLoginStatus = () => {
-            const token = typeof window !== 'undefined' && localStorage.getItem('token')
-            setIsLoggedIn(!!token)
-        }
-
-        checkLoginStatus()
-        setMounted(true) // Fix hydration mismatch warning
-
-        window.addEventListener('storage', checkLoginStatus)
-        return () => window.removeEventListener('storage', checkLoginStatus)
-    }, [])
+          try {
+            const token = localStorage.getItem('token');
+            if (token) {
+              const decoded: { exp: number } = jwtDecode(token);
+              const isExpired = decoded.exp * 1000 < Date.now();
+              setIsLoggedIn(!isExpired);
+            } else {
+              setIsLoggedIn(false);
+            }
+          } catch (err) {
+            console.error('Invalid token:', err);
+            setIsLoggedIn(false);
+          }
+        };
+      
+        setMounted(true);
+        checkLoginStatus();
+      
+        window.addEventListener('storage', checkLoginStatus);
+        return () => window.removeEventListener('storage', checkLoginStatus);
+      }, []);
+      
 
     const handleLogout = () => {
         localStorage.removeItem('token');

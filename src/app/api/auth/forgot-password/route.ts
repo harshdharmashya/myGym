@@ -40,7 +40,26 @@ export async function POST(req: Request) {
             from: `"myGym Support" <${process.env.EMAIL_USER}>`,
             to: email,
             subject: 'Reset Your Password',
-            html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
+            html: `<div>
+        <h2>Password Reset Request</h2>
+        <p>Hi,</p>
+        <p>We received a request to reset your password for your <strong>myGym</strong> account.</p>
+        <p>If you made this request, click the button below to reset your password. <strong>This link is valid for only 15 minutes.</strong></p>
+        <a href="${resetLink}" style="display: inline-block;
+          background-color: #007bff;
+          color: #fff;
+          padding: 12px 20px;
+          text-decoration: none;
+          border-radius: 6px;
+          margin-top: 20px;">Reset Password</a>
+        <p>If the button doesn’t work, you can also copy and paste the following URL into your browser:</p>
+        <p><a href="${resetLink}">${resetLink}</a></p>
+        <p>If you did not request a password reset, please ignore this email or <a href="mailto:test@reeduversity.com">contact support</a>.</p>
+        <p>Thanks,<br />The myGym Team</p>
+        <div>
+          <p>© 2025 myGym. All rights reserved.</p>
+        </div>
+      </div>`,
         });
 
         return NextResponse.json({ message: `Reset link sent on email ${email}` });
