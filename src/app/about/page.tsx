@@ -1,5 +1,4 @@
 import React from 'react'
-import '@/Static/CSS/index.css'
 export default function page() {
     return (
         <>

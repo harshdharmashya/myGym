@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 
 export async function POST(req: Request) {
-  const { name, email, password } = await req.json();
+  const { name, email, password, profilePic } = await req.json();
 
   if (!email || !password) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
@@ -21,6 +21,7 @@ export async function POST(req: Request) {
       name,
       email,
       password: hashedPassword,
+      profilePic,
     },
   });
 

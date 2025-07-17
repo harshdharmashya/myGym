@@ -25,6 +25,6 @@ export async function POST(req: Request) {
     message: 'Login successful',
     token,
     expiresIn: JWT_EXPIRES_IN,
-    user: { id: user.id, email: user.email, name: user.name }
+    user: { id: user.id, email: user.email, name: user.name, profilePic: user.profilePic || '' },
   });
 }

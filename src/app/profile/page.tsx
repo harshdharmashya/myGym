@@ -3,11 +3,12 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function ProfilePage() {
-    const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+    const [user, setUser] = useState<{ name: string; email: string, profilePic : string } | null>(null);
     const router = useRouter();
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
+        console.log('Stored User:', storedUser);
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         } else {
@@ -31,7 +32,7 @@ export default function ProfilePage() {
             <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md text-center">
                 <img
                     className="mx-auto mb-4 w-24 h-24 rounded-full object-cover"
-                    src="https://api.dicebear.com/7.x/thumbs/svg?seed=Profile"
+                    src={user.profilePic ? user.profilePic : '/default-user.png'}
                     alt="Profile"
                 />
                 <h2 className="text-2xl font-bold mb-2 text-black">{user.name}</h2>

@@ -10,6 +10,7 @@ export default function SignupPage() {
     email: '',
     password: '',
     confirmPassword: '',
+    profilePic: '',
   });
 
 
@@ -20,10 +21,24 @@ export default function SignupPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prev => ({
+          ...prev,
+          profilePic: reader.result as string,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { name, email, password, confirmPassword } = formData;
+    const { name, email, password, confirmPassword, profilePic } = formData;
 
     if (password !== confirmPassword) {
       setError('Passwords do not match!');
@@ -34,7 +49,7 @@ export default function SignupPage() {
       const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, profilePic }),
       });
 
       const data = await res.json();
@@ -61,7 +76,16 @@ export default function SignupPage() {
         <h2 className="text-2xl font-bold mb-6 text-center">Create Account</h2>
 
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-
+        <div className="mb-6">
+          <label className="block mb-1 font-medium">Profile Picture</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="w-full border px-3 py-2 rounded"
+            required
+          />
+        </div>
         <div className="mb-4">
           <label className="block mb-1 font-medium">Name</label>
           <input
@@ -73,7 +97,6 @@ export default function SignupPage() {
             required
           />
         </div>
-
         <div className="mb-4">
           <label className="block mb-1 font-medium">Email</label>
           <input
@@ -112,7 +135,7 @@ export default function SignupPage() {
 
         <button
           type="submit"
-          className="w-full bg-gray-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          className="w-full bg-gray-600 text-white py-2 rounded hover:bg-gray-800 transition"
         >
           Sign Up
         </button>
