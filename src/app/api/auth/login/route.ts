@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
+import { emailQueue } from '@/lib/queues/emailQueue';
 import jwt from 'jsonwebtoken';
 
 export async function POST(req: Request) {
@@ -20,7 +21,11 @@ export async function POST(req: Request) {
     JWT_SECRET,
     { expiresIn: JWT_EXPIRES_IN as `${number}${'h' | 'd' | 'm'}` }
   );
-
+  await emailQueue.add('sendEmail', {
+    type: 'login-alert',
+    to: user.email,
+    name: user.name,
+  });
   return NextResponse.json({
     message: 'Login successful',
     token,
