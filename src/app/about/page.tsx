@@ -2,7 +2,7 @@ import React from 'react'
 export default function page() {
     return (
         <>
-            <div className='p-8'>
+            <div className='p-8 mt-4'>
                 <h1 className="text-4xl font-bold text-center mt-10">About Us</h1>
                 <hr className='w-[150px] h-1 bg-white mx-auto my-[5px] rounded-[20px]'/>
                 <p className="text-center mt-4 text-lg">
@@ -10,16 +10,16 @@ export default function page() {
                 </p>
             </div>
             <div className='flex'>
-                <div className='h-[400px] w-full overflow-hidden basis-[30%]'><img className='transition-all duration-500 ease-in-out hover:scale-125 w-full h-full object-cover' src="https://i.pinimg.com/736x/ad/5a/36/ad5a36a36574e209196d12f8c1f5f9e6.jpg" alt="" /></div>
+                <div className='h-[420px] w-full overflow-hidden basis-[30%]'><img className='transition-all duration-500 ease-in-out hover:scale-125 w-full h-full object-cover' src="https://i.pinimg.com/736x/ad/5a/36/ad5a36a36574e209196d12f8c1f5f9e6.jpg" alt="" /></div>
                 <div className='flex flex-col basis-[40%]'>
-                    <div className='h-[200px] w-full overflow-hidden'>
+                    <div className='h-[210px] w-full overflow-hidden'>
                         <img className='transition-all duration-500 ease-in-out hover:scale-125 w-full h-full object-cover' src="https://i.pinimg.com/736x/e6/dd/3c/e6dd3cd2fd66aa6048526d3d0fd138df.jpg" alt="" />
                     </div>
-                    <div className='h-[200px] w-full overflow-hidden'>
+                    <div className='h-[210px] w-full overflow-hidden'>
                         <img className='transition-all duration-500 ease-in-out hover:scale-125 w-full h-full object-cover' src="https://i.pinimg.com/736x/df/8e/4c/df8e4c19463cb60023581232501dc410.jpg" alt="" />
                     </div>
                 </div>
-                <div className='h-[400px] w-full overflow-hidden basis-[30%]'><img className='transition-all duration-500 ease-in-out hover:scale-125 w-full h-full object-cover' src="https://i.pinimg.com/736x/39/da/d0/39dad0fb1e7c5f42579763ee328bd0cb.jpg" alt="" /></div>
+                <div className='h-[420px] w-full overflow-hidden basis-[30%]'><img className='transition-all duration-500 ease-in-out hover:scale-125 w-full h-full object-cover' src="https://i.pinimg.com/736x/39/da/d0/39dad0fb1e7c5f42579763ee328bd0cb.jpg" alt="" /></div>
             </div>
             <div>
                 <h2 className='text-3xl font-bold text-center mt-10'>Our Mission</h2>

@@ -38,7 +38,7 @@ useEffect(()=>{
         <p className="text-center text-xl mt-4 mb-10">Explore our diverse range of workouts designed for all fitness levels.</p>
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
           {service && service.map((value) => (
-            <Link href={`/services/${value.id}`}>
+            <Link href={`/services/${value.id}`}  key={value.id}>
               <div className='p-4 text-center mb-5 gap-[20px] h-auto rounded-[10px] w-full border border-[#f0f0f0] overflow-hidden '>
                 <div className='w-full h-[240px] rounded-[10px] overflow-hidden transition-all duration-500 ease-in-out hover:scale-105'>
                   <img className='h-full w-full cursor-pointer object-cover' src={value.image} alt="" />

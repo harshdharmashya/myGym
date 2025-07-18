@@ -29,7 +29,7 @@ export default function ContactPage() {
       if (res.ok) {
         setSubmitted(true);
         setForm({ name: '', email: '', message: '' });
-        toast.success('Submitted Successfully!');
+        toast.success('Thank you! Your message has been sent.');
       } else {
         const error = await res.json();
         toast.error(`Error: ${error.message || 'Failed to submit form'}`);
@@ -89,10 +89,6 @@ export default function ContactPage() {
             Send Message
           </button>
         </form>
-
-        {submitted && (
-          <p className="text-green-300 text-center mt-4">Thank you! Your message has been sent.</p>
-        )}
       </div>
     </div>
   );

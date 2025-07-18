@@ -24,20 +24,17 @@ export async function POST(req: Request) {
         },
     });
 
-
     try {
         await emailQueue.add('resetPassword', {
-            type: 'reset_password',
+            type: 'reset-password',
             to: user.email,
             token: token,
           });
-          
 
         return NextResponse.json({ message: `Reset email queued to ${email}` });
     } catch (error) {
         console.error('❌ Failed to queue email job:', error);
         return NextResponse.json({ error: 'Failed to queue email' }, { status: 500 });
     }
-
     return NextResponse.json({ message: `Reset link sent on email ${email}` });
 }

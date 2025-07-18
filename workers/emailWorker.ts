@@ -21,7 +21,23 @@ const sendResetEmail = async (to: string, token: string) => {
     from: `"myGym Support" <${process.env.EMAIL_USER}>`,
     to,
     subject: 'Reset Your Password',
-    html: `<p>Click here to reset your password: <a href="${resetLink}">${resetLink}</a></p>`,
+    html: `<div>
+      <div>
+        <h1>Password Reset Request</h1>
+      </div>
+      <div>
+        <p>Hi,</p>
+        <p>We received a request to reset your password.</p>
+        <p>
+          Click the button below to reset your password:
+        </p>
+        <a href="${resetLink}" class="button">Reset Password</a>
+        <p>If you did not request this, please ignore this email.</p>
+        <div class="footer">
+          <p>Thanks,<br />Your Support Team</p>
+        </div>
+      </div>
+    </div>`,
   });
   console.log(`📨 Reset email sent to ${to}`);
 };
