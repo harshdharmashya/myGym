@@ -1,63 +1,54 @@
-'use client'
-import React from 'react'
-import { useParams } from 'next/navigation'
-export default function page() {
-    const params = useParams()
-    const serviceId = Number(params.slug)
+'use client';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 
-    const services = [
-        {
-          "id":1,
-          "image": "https://i.pinimg.com/736x/6f/ce/31/6fce31da8d0762094aa2e8ed1d3ccc6e.jpg",
-          "title": "Personal Training",
-          "paragraph": "Get one-on-one coaching with certified trainers who create custom fitness plans based on your goals, body type, and lifestyle."
-        },
-        {
-          "id":2,
-          "image": "https://i.pinimg.com/736x/9e/0b/d7/9e0bd7ab178e89f3a3fb6934c4491550.jpg",
-          "title": "Group Fitness Classes",
-          "paragraph": "Enjoy energetic group sessions including HIIT, Zumba, yoga, and strength training to keep you motivated and on track."
-        },
-        {
-          "id":3,
-          "image": "https://i.pinimg.com/736x/2e/08/36/2e08365324a0da82cab512b498fffee8.jpg",
-          "title": "Cardio Zone",
-          "paragraph": "State-of-the-art treadmills, cycling bikes, and elliptical machines to help you improve your heart health and endurance."
-        },
-        {
-          "id":4,
-          "image": "https://i.pinimg.com/736x/6f/ce/31/6fce31da8d0762094aa2e8ed1d3ccc6e.jpg",
-          "title": "Strength Training",
-          "paragraph": "A wide range of weights and resistance machines designed to build muscle, increase strength, and improve overall body tone."
-        },
-        {
-          "id":5,
-          "image": "https://i.pinimg.com/736x/9e/0b/d7/9e0bd7ab178e89f3a3fb6934c4491550.jpg",
-          "title": "Nutrition Coaching",
-          "paragraph": "Work with expert dietitians to develop healthy eating habits and meal plans tailored to support your fitness goals."
-        },
-        {
-          "id":6,
-          "image": "https://i.pinimg.com/736x/2e/08/36/2e08365324a0da82cab512b498fffee8.jpg",
-          "title": "Sauna & Recovery",
-          "paragraph": "Relax after your workout with our sauna and recovery zone that helps reduce muscle soreness and boost relaxation."
+interface Service {
+  id: number;
+  image: string;
+  title: string;
+  paragraph: string;
+}
+
+export default function ServiceDetailPage(){
+  const [service, setService] = useState<Service | null>(null);
+  const params = useParams();
+  console.log('Params:', params.slug); // Log the params to check their structure
+  const serviceId = params.slug; // use `id` instead of `slug`
+console.log('Service ID:', serviceId);
+  useEffect(() => {
+    const fetchService = async () => {
+      try {
+        const response = await fetch(`/api/services/${serviceId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setService(data);
+          console.log('Service fetched successfully:', data);
+        } else {
+          console.error('Service not found');
         }
-      ]
+      } catch (error) {
+        console.error('Error fetching service:', error);
+      }
+    };
 
-    const service = services.find((item)=>item.id == serviceId)
+    if ((serviceId)) fetchService();
+  }, [serviceId]);
+
+  if (!service) {
+    return <div className="text-center p-8">Loading service...</div>;
+  }
+
   return (
-    <>  
-        <div className='p-8'>
-            <h1 className="text-4xl font-bold text-center mt-10">{service?.title}</h1>
-                            <hr className='w-[150px] h-1 bg-white mx-auto my-[5px] rounded-[20px]'/>
+    <div className='p-8'>
+      <h1 className="text-4xl font-bold text-center mt-10">{service.title}</h1>
+      <hr className='w-[150px] h-1 bg-white mx-auto my-[5px] rounded-[20px]' />
 
-            <div className='p-4 text-center mb-5 gap-[20px] h-auto rounded-[10px] w-full border border-[#f0f0f0]'>
-            <div className='w-full h-[240px] rounded-[10px] overflow-hidden transition-all duration-500 ease-in-out hover:scale-105'>
-                <img className='h-full w-full cursor-pointer object-cover' src={service?.image} alt="" />
-            </div>
-            <p className='mt-4'>{service?.paragraph}</p>
-            </div>
+      <div className='p-4 text-center mb-5 rounded-[10px] w-full border border-[#f0f0f0]'>
+        <div className='w-full h-[240px] rounded-[10px] overflow-hidden'>
+          <img className='h-full w-full object-cover' src={service.image} alt={service.title} />
         </div>
-    </>
-  )
+        <p className='mt-4'>{service.paragraph}</p>
+      </div>
+    </div>
+  );
 }
