@@ -12,38 +12,52 @@ import {
 } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useEffect, useState } from 'react'
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 export default function Navbar() {
+    interface User {
+        id: string;
+        email: string;
+        role: string;
+      }
     const pathname = usePathname()
     const router = useRouter()
 
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [mounted, setMounted] = useState(false) // for hydration fix
+    const [mounted, setMounted] = useState(false)
+    const [user, setUser] = useState<User | null>()
     useEffect(() => {
         const checkLoginStatus = () => {
-          try {
-            const token = localStorage.getItem('token');
-            if (token) {
-              const decoded: { exp: number } = jwtDecode(token);
-              const isExpired = decoded.exp * 1000 < Date.now();
-              setIsLoggedIn(!isExpired);
-            } else {
-              setIsLoggedIn(false);
+            try {
+                const token = localStorage.getItem('token');
+                const storedUser = localStorage.getItem('user');
+                if (storedUser) {
+                    const userData = JSON.parse(storedUser);
+                    setUser(userData);
+                } else {
+                    setUser(null);
+                }
+
+                if (token) {
+                    const decoded: { exp: number } = jwtDecode(token);
+                    const isExpired = decoded.exp * 1000 < Date.now();
+                    setIsLoggedIn(!isExpired);
+                } else {
+                    setIsLoggedIn(false);
+                }
+            } catch (err) {
+                console.error('Invalid token:', err);
+                setIsLoggedIn(false);
             }
-          } catch (err) {
-            console.error('Invalid token:', err);
-            setIsLoggedIn(false);
-          }
         };
-      
+
         setMounted(true);
         checkLoginStatus();
-      
+
         window.addEventListener('storage', checkLoginStatus);
         return () => window.removeEventListener('storage', checkLoginStatus);
-      }, []);
-      
+    }, []);
+
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -89,8 +103,8 @@ export default function Navbar() {
                                     key={item.name}
                                     href={item.href}
                                     className={`px-4 py-2 rounded ${pathname === item.href
-                                            ? 'bg-white text-black font-semibold'
-                                            : 'text-white'
+                                        ? 'bg-white text-black font-semibold'
+                                        : 'text-white'
                                         }`}
                                 >
                                     {item.name}
@@ -98,13 +112,25 @@ export default function Navbar() {
                             ))}
                             {!isLoggedIn && (
                                 <>
-                                    <Link href="/login" className="text-white px-4 py-2">
+                                    <Link href="/login" className={`px-4 py-2 rounded ${pathname === '/login'
+                                        ? 'bg-white text-black font-semibold'
+                                        : 'text-white'
+                                        }`}>
                                         Login
                                     </Link>
-                                    <Link href="/signup" className="text-white px-4 py-2">
+                                    <Link href="/signup" className={`px-4 py-2 rounded ${pathname === '/signup'
+                                        ? 'bg-white text-black font-semibold'
+                                        : 'text-white'
+                                        }`}>
                                         Sign up
                                     </Link>
                                 </>
+                            )}
+                            {isLoggedIn && user && user.role === 'ADMIN' &&  (
+                                <Link href="/admin/dashboard"  className={`px-4 py-2 rounded ${pathname === '/admin/dashboard'
+                                    ? 'bg-white text-black font-semibold'
+                                    : 'text-white'
+                                    }`}>Admin Dashboard</Link>
                             )}
                         </div>
                     </div>
