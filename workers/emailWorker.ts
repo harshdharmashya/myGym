@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendResetEmail = async (to: string, token: string) => {
-  const resetLink = `http://localhost:3000/reset-password?token=${token}`;
+  const resetLink = `http://localhost:3000/reset-password/${token}`;
   await transporter.sendMail({
     from: `"myGym Support" <${process.env.EMAIL_USER}>`,
     to,
